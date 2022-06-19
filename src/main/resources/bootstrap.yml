@@ -1,0 +1,20 @@
+server:
+  port: 8888
+
+spring:
+  #security:
+    #user:
+      #name: nttdata
+      #password: nttdata
+  application:
+    name: config-service
+  cloud:
+    config:
+      server:
+        git:
+           clone-on-start: true
+           uri: https://github.com/bank-nttdata/config-server-data.git
+           #username: nttdata
+           #password: nttdata
+           search-paths: /
+           default-label: master
