@@ -1,5 +1,14 @@
 server:
-  port: ${CONFIG_PORT:8888}
+  port: ${PORT:8888}
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure.include: health
+  endpoint:
+    health:
+      show-details: always    
 
 spring:
   #security:
@@ -14,6 +23,6 @@ spring:
         git:
            clone-on-start: true
            uri: ${REPOSITORY_CONFIG_URI:https://github.com/bank-nttdata/config-server-data.git}
+           default-label: master
            #username: nttdata
            #password: nttdata
-           default-label: master
