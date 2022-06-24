@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.nttdata.microservices</groupId>
     <artifactId>config-server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>config-server</name>
     <description>config-server</description>
     <properties>
@@ -60,6 +60,74 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.2.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.cloud.tools</groupId>
+                        <artifactId>jib-spring-boot-extension-maven</artifactId>
+                        <version>0.1.0</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <from>
+                        <image>adoptopenjdk/openjdk11:jre-11.0.6_10-alpine</image>
+                    </from>
+                    <to>
+                        <image>${project.artifactId}</image>
+                        <tags>
+                            <tag>${project.version}</tag>
+                        </tags>
+                    </to>
+                    <container>
+                        <environment>
+                            <CONFIG_SERVER_URI>http://localhost:8888</CONFIG_SERVER_URI>
+                            <REPOSITORY_CONFIG_URI>https://github.com/bank-nttdata/config-server-data.git</REPOSITORY_CONFIG_URI>
+                            <CONFIG_PORT>8888</CONFIG_PORT>
+                        </environment>
+                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                    </container>
+                    <pluginExtensions>
+                        <pluginExtension>
+                            <implementation>com.google.cloud.tools.jib.maven.extension.springboot.JibSpringBootExtension</implementation>
+                        </pluginExtension>
+                    </pluginExtensions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>dockerBuild</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.amashchenko.maven.plugin</groupId>
+                <artifactId>gitflow-maven-plugin</artifactId>
+                <version>1.18.0</version>
+                <configuration>
+                    <installProject>false</installProject>
+                    <verbose>true</verbose>
+                    <gitFlowConfig>
+                        <productionBranch>master</productionBranch>
+                        <developmentBranch>develop</developmentBranch>
+                        <featureBranchPrefix>feature/</featureBranchPrefix>
+                        <releaseBranchPrefix>release/</releaseBranchPrefix>
+                        <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
+                        <supportBranchPrefix>support/</supportBranchPrefix>
+                        <versionTagPrefix>v</versionTagPrefix>
+                        <origin>origin</origin>
+                    </gitFlowConfig>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.9.1.2184</version>
             </plugin>
         </plugins>
     </build>
